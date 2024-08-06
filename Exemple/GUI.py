@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk  # Importer le module ttk pour les widgets améliorés
 import pandas as pd
-from Appli_copy import *
+from Backup.Appli_copy import *
 
 class GUI:
     def __init__(self, master):

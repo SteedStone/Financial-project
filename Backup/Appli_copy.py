@@ -2,17 +2,13 @@ import pandas as pd
 import numpy as np 
 import numpy_financial as npf
 
-data = pd.read_excel(r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm",engine="openpyxl",sheet_name='BBG rates',skiprows=1) 
 
 class Parametres:
-    def __init__(self, Nombre_de_periodes, montant_emprunt, taux_interet_annuel, prepayment, nombre_de_payment_par_an, Duree_repracing_anne,per):
+    def __init__(self, Nombre_de_periodes, taux_interet_annuel, Duree_repracing_anne):
         self.Nombre_de_periodes = Nombre_de_periodes
-        self.montant_emprunt = montant_emprunt
         self.taux_interet_annuel = taux_interet_annuel
-        self.prepayment = prepayment
-        self.nombre_de_payment_par_an = nombre_de_payment_par_an
         self.Duree_repracing_anne = Duree_repracing_anne
-        self.per = per
+        
 
 
 
@@ -28,19 +24,20 @@ class Calculs:
     
      
     def retourne_valeurs_attendue(self) : 
-            montant_emprunt = self.parametres.montant_emprunt
+            montant_emprunt = 10000000
             Nombre_de_periodes = self.parametres.Nombre_de_periodes
-            prepayment = self.parametres.prepayment
+            prepayment = 0.04 
             taux_interet_annuel = self.parametres.taux_interet_annuel
-            nombre_de_payment_par_an = self.parametres.nombre_de_payment_par_an
+            nombre_de_payment_par_an = 12
             Duree_repracing_anne = self.parametres.Duree_repracing_anne
-            per = self.parametres.per
+            per = 1
+            data = self.gestion_fichier.data 
             
             Periodical_basis = (1 + taux_interet_annuel) ** (1 / nombre_de_payment_par_an) - 1
-            print(Periodical_basis)
+            #print(Periodical_basis)
             
             Periodical_basis_2 = (1 + prepayment) ** (1 / nombre_de_payment_par_an) - 1
-            print(Periodical_basis_2)
+            #print(Periodical_basis_2)
             ColonneA = np.arange(0, 361)
             ColonneB = np.arange(0,180.5,0.5)
             ColonneC = np.arange(0,90.25,0.25)
@@ -361,8 +358,8 @@ class Calculs:
             AS = FC/AS*1200
             
             ASFinale = ((1+AS/100/12)**12-1)*100
-            print(ColonneG)
-            print(ColonneH)
+            #print(ColonneG)
+            #print(ColonneH)
             
             return ASFinale
 
@@ -376,32 +373,19 @@ class Calculs:
 # Paramètres à modifier
 parametres = Parametres(
     Nombre_de_periodes=300,
-    montant_emprunt=10000000,
     taux_interet_annuel=1.617/100,
-    prepayment=4/100,
-    nombre_de_payment_par_an=12,
     Duree_repracing_anne=100,
-    per = 1
 )
 
 # Chemin vers le fichier Excel
-chemin_fichier = r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm"
+#chemin_fichier = r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm"
 
 # Création des instances
-gestion_fichier = GestionFichier(chemin_fichier)
-calculs = Calculs(parametres, gestion_fichier)
+#gestion_fichier = GestionFichier(chemin_fichier)
+#calculs = Calculs(parametres, gestion_fichier)
 
 
 # Exemple d'utilisation des paramètres et du fichier de données
 #print(calculs.parametres.Nombre_de_periodes)
 #print(calculs.parametres.Duree_repracing_anne)
 #print(calculs.retourne_valeurs_attendue())
-
-
-
-
-
-
-
-
-     
