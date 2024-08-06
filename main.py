@@ -5,6 +5,7 @@ import Backup.Appli_copy as Ap
 import numpy 
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import threading
 
 
 
@@ -17,6 +18,7 @@ class TableauResume(customtkinter.CTkFrame):
         self.MortGage = MortGage
         self.FTPS = FTPS
         self.bol = bol
+        self.value = {}
         self.Mortgage_FTPS = {
             ("10Y - 1/1/1", "FTP Rates"): "-",
             ("15Y - 1/1/1", "FTP Rates"): "-",
@@ -41,10 +43,35 @@ class TableauResume(customtkinter.CTkFrame):
         
 
     def create_tableau(self):
-        print(self.bol)
         # Créer les en-têtes des colonnes
         if self.bol == True : 
-            self.init_valeur()
+            self.start_init_valeur()
+        else : 
+            self.update_tableau()
+
+    def start_init_valeur(self) : 
+        thread = threading.Thread(target=self.init_valeur)
+        thread.start()
+    def init_valeur(self) : 
+            for cle in self.Mortgage_FTPS : 
+                print(cle)
+                elements = cle[0].split()
+                premier_element = elements[0]
+                nmb_Periode = int(premier_element[:-1]) * 12
+                if "FIX" in elements : 
+                    duree_rpracing = 100
+                else : 
+                    duree_rpracing = int(elements[2].split('/')[0])
+                    print(duree_rpracing)
+                # Taux is useless because it is reassigned later in the function
+                taux=0
+                print(nmb_Periode)
+                print(duree_rpracing)
+                self.Mortgage_FTPS[cle] = str(self.parent.donne_resultat(nmb_Periode,taux , duree_rpracing))
+            self.after(0, self.update_tableau())
+                
+
+    def update_tableau(self ):
         customtkinter.CTkLabel(self, text="Mortgage").grid(row=0, column=0, sticky="nsew")
         for i, magasin in enumerate(self.FTPS, start=1):
             customtkinter.CTkLabel(self, text=magasin).grid(row=0, column=i, sticky="nsew")
@@ -61,32 +88,10 @@ class TableauResume(customtkinter.CTkFrame):
             self.grid_columnconfigure(i, weight=1)
         for i in range(len(self.MortGage) + 1):
             self.grid_rowconfigure(i, weight=1)
-    def init_valeur(self) : 
-            for cle in self.Mortgage_FTPS : 
-                print(cle)
-                elements = cle[0].split()
-                premier_element = elements[0]
-                nmb_Periode = int(premier_element[:-1]) * 12
-                if "FIX" in elements : 
-                    duree_rpracing = 100
-                else : 
-                    duree_rpracing = int(elements[2].split('/')[0])
-                taux = 0.0158
-                print(nmb_Periode)
-                print(duree_rpracing)
-                self.Mortgage_FTPS[cle] = str(self.parent.donne_resultat(nmb_Periode,taux , duree_rpracing))
-                print(self.Mortgage_FTPS[cle])
-
     def get_prix(self, Mortgage, FTPS ):
         # Simulation de la fonction pour obtenir le prix du fruit dans le magasin spécifié
         # Ici, nous supposerons que nous avons une liste de prix pour chaque fruit dans chaque magasin
         # et nous y accéderons avec des clés fruit-magasin
-        
-        
-
-
-
-            
         return self.Mortgage_FTPS.get((Mortgage, FTPS), "-")
 
 class App(customtkinter.CTk):
@@ -269,6 +274,7 @@ class App(customtkinter.CTk):
 
     def third_box(self , bol) : 
         
+
         self.graphical = TableauResume(self , self.Mortgage , self.FTP , bol ) 
         self.graphical.grid(row=1, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew" ) 
         self.graphical.grid_columnconfigure(1, weight=1)
