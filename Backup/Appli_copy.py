@@ -24,13 +24,16 @@ class Calculs:
     
      
     def retourne_valeurs_attendue(self) : 
+            # Param that won't change
             montant_emprunt = 10000000
-            Nombre_de_periodes = self.parametres.Nombre_de_periodes
             prepayment = 0.04 
-            taux_interet_annuel = self.parametres.taux_interet_annuel
             nombre_de_payment_par_an = 12
-            Duree_repracing_anne = self.parametres.Duree_repracing_anne
             per = 1
+
+            # Param that will change
+            Nombre_de_periodes = self.parametres.Nombre_de_periodes
+            taux_interet_annuel = self.parametres.taux_interet_annuel
+            Duree_repracing_anne = self.parametres.Duree_repracing_anne
             data = self.gestion_fichier.data 
             
             Periodical_basis = (1 + taux_interet_annuel) ** (1 / nombre_de_payment_par_an) - 1
@@ -38,34 +41,22 @@ class Calculs:
             
             Periodical_basis_2 = (1 + prepayment) ** (1 / nombre_de_payment_par_an) - 1
             #print(Periodical_basis_2)
-            ColonneA = np.arange(0, 361)
-            ColonneB = np.arange(0,180.5,0.5)
-            ColonneC = np.arange(0,90.25,0.25)
-            ColonneD = ColonneA/12 
-            ColonneE = np.zeros(361)
-            ColonneF = np.zeros(361)
-            ColonneF[0] = 0 
-            ColonneG = np.zeros(361)
-            ColonneG[0] = 0 
+            array = np.random.rand(30,361)
+            array[0] = np.arange(0, 361)
+            array[1] = np.arange(0,180.5,0.5)
+            array[2] = np.arange(0,90.25,0.25)
+            array[3] = array[0]/12
+            array[4] = np.zeros(361)
 
-            ColonneH = np.zeros(361)
-            ColonneH[0] = 0 
-            ColonneI = np.zeros(361)
-            ColonneI[0] = 0 
-            ColonneJ = np.zeros(361)
-            ColonneJ[0] = 0 
-            ColonneK = np.zeros(361)
-            ColonneK[0] = 0 
-            ColonneL = np.zeros(361)
-            ColonneL[0] = 0 
-            ColonneO = np.zeros(361)
-            ColonneO[0] = 0 
-            ColonneP = np.zeros(361)
-            ColonneP[0] = 0 
-            ColonneN = np.zeros(361)
+            for i in range(5,14) : 
+                  array[i] = np.zeros(361)
+                  array[i][0] = 0
+            array[14] = np.zeros(361)
             ColonneR = np.arange(1, 361)
+            #Array[16] contient des chiffres random ATTENTION
             ColonneS = []
-            ColonneE[0] = montant_emprunt
+
+            array[4][0] = montant_emprunt
 
             if per < 1 or per > Nombre_de_periodes:
                   raise ValueError("La valeur de 'pér' doit être comprise entre 1 et 'Nombre_de_periodes'.")
@@ -73,83 +64,83 @@ class Calculs:
             for i in range(1,Nombre_de_periodes + 1 ) : 
             
                   it = Nombre_de_periodes - i +  1
-                  ppmt = -npf.ppmt(Periodical_basis, per, it, ColonneE[i - 1])
+                  ppmt = -npf.ppmt(Periodical_basis, per, it, array[4][i - 1])
                   
-                  ColonneF[i] = ColonneE[i - 1] * (1 + Periodical_basis) - ColonneE[i - 1]
+                  array[5][i] = array[4][i - 1] * (1 + Periodical_basis) - array[4][i - 1]
                         
-                  ColonneG[i] = ppmt 
-                  ColonneH[i] = (ColonneE[i - 1] - ColonneG[i]) * Periodical_basis_2 
+                  array[6][i] = ppmt 
+                  array[7][i] = (array[4][i - 1] - array[6][i]) * Periodical_basis_2 
 
-                  ColonneE[i] = ColonneE[i - 1] - ColonneG[i] - ColonneH[i]
+                  array[4][i] = array[4][i - 1] - array[6][i] - array[7][i]
                   #Colonne I 
-                  for i in range(1,len(ColonneE)  ) : 
-                        ColonneI[i] = ColonneF[i] + ColonneG[i] + ColonneH[i]
+                  for i in range(1,len(array[4])  ) : 
+                        array[8][i] = array[5][i] + array[6][i] + array[7][i]
 
         
             #Colonne J 
-            for i in range(1,len(ColonneJ)) : 
+            for i in range(1,len(array[9])) : 
                   if (nombre_de_payment_par_an == 1 ) : 
-                        ColonneJ[i] = i*ColonneI[i]
+                        array[9][i] = i*array[8][i]
                   else : 
                         if(nombre_de_payment_par_an == 2 ) : 
-                              ColonneJ[i] = ColonneI[i]*ColonneB[i]
+                              array[9][i] = array[8][i]*array[1][i]
                         else : 
                               if(nombre_de_payment_par_an == 4) : 
-                                    ColonneJ[i] = ColonneI[i]*ColonneC[i]
+                                    array[9][i] = array[8][i]*array[2][i]
                               else : 
-                                    ColonneJ[i] = ColonneI[i]*ColonneD[i]      
+                                    array[9][i] = array[8][i]*array[3][i]      
                               
 
 
             #Colonne K 
-            for i in range(1,len(ColonneK)) : 
+            for i in range(1,len(array[10])) : 
                   Exposant = 0 
                   if (nombre_de_payment_par_an == 1) : 
                         Exposant = i
                   else : 
                         if(nombre_de_payment_par_an == 2) : 
-                              Exposant = ColonneB[i]
+                              Exposant = array[1][i]
                         else : 
                               if(nombre_de_payment_par_an == 4) : 
-                                    Exposant = ColonneC[i]
+                                    Exposant = array[2][i]
                               else : 
-                                    Exposant = ColonneD[i]            
-                  ColonneK[i] = ColonneI[i] / ( 1 + taux_interet_annuel)**Exposant
+                                    Exposant = array[3][i]            
+                  array[10][i] = array[8][i] / ( 1 + taux_interet_annuel)**Exposant
             
             #Colonne L 
-            for i in range(1,len(ColonneK)) : 
+            for i in range(1,len(array[10])) : 
                   Exposant = 0 
                   if (nombre_de_payment_par_an == 1) : 
                         Exposant = i
                   else : 
                         if(nombre_de_payment_par_an == 2) : 
-                              Exposant = ColonneB[i]
+                              Exposant = array[1][i]
                         else : 
                               if(nombre_de_payment_par_an == 4) : 
-                                    Exposant = ColonneC[i]
+                                    Exposant = array[2][i]
                               else : 
-                                    Exposant = ColonneD[i]            
-                  ColonneL[i] = ColonneJ[i] / ( 1 + taux_interet_annuel)**Exposant 
+                                    Exposant = array[3][i]            
+                  array[11][i] = array[9][i] / ( 1 + taux_interet_annuel)**Exposant 
 
-            ColonneN[0] = ColonneE[0] + ColonneH[0]
+            array[14][0] = array[4][0] + array[7][0]
             #Colonne O et P 
             for i in range(1,Nombre_de_periodes + 1 ) : 
                   it = Nombre_de_periodes - i +  1
-                  ppmt = -npf.ppmt(Periodical_basis, per, it, ColonneN[i - 1])
+                  ppmt = -npf.ppmt(Periodical_basis, per, it, array[14][i - 1])
                   
-                  ColonneO[i] = ColonneN[i - 1] * (1 + Periodical_basis) - ColonneN[i - 1]
+                  array[12][i] = array[14][i - 1] * (1 + Periodical_basis) - array[14][i - 1]
                         
-                  ColonneP[i] = ppmt 
+                  array[13][i] = ppmt 
 
-                  ColonneN[i] = ColonneN[i - 1] - ColonneP[i] 
+                  array[14][i] = array[14][i - 1] - array[13][i] 
             
         
 
 
             #Colonne S T U  
             counter = 1
-            while(ColonneD[counter] < Duree_repracing_anne and counter) : 
-                  ColonneS.append(ColonneG[counter] + ColonneH[counter])
+            while(array[3][counter] < Duree_repracing_anne and counter) : 
+                  ColonneS.append(array[6][counter] + array[7][counter])
                   counter += 1
                   if (counter == 361) : 
                         break 
@@ -163,8 +154,8 @@ class Calculs:
             for i in range(0,len(ColonneS)) : 
                   if (ColonneS[i] == 0 and ColonneS[i-1] > 0  ) : 
                         sum = 0 
-                        for j in range(i+1,len(ColonneG)) : 
-                              sum += ColonneG[j] + ColonneH[j] 
+                        for j in range(i+1,len(array[6])) : 
+                              sum += array[6][j] + array[7][j] 
                         ColonneT[i] = sum      
                   else : 
                         ColonneT[i] = ColonneS[i]       
@@ -358,8 +349,8 @@ class Calculs:
             AS = FC/AS*1200
             
             ASFinale = ((1+AS/100/12)**12-1)*100
-            #print(ColonneG)
-            #print(ColonneH)
+            #print(array[6])
+            #print(array[7])
             
             return ASFinale
 

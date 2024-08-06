@@ -33,6 +33,7 @@ class TestAppli_copy(unittest.TestCase):
             Duree_repracing_anne=100,
         )
         calculs = app.Calculs(parametres0, file_class)
+        print(calculs.retourne_valeurs_attendue())
         self.assertEqual(round(calculs.retourne_valeurs_attendue(),3), -0.192)
 
 if __name__ == '__main__':
