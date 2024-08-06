@@ -371,21 +371,10 @@ class Calculs:
     # Méthodes pour effectuer les calculs
 
 # Paramètres à modifier
-parametres = Parametres(
-    Nombre_de_periodes=300,
-    taux_interet_annuel=1.617/100,
-    Duree_repracing_anne=100,
-)
-
-# Chemin vers le fichier Excel
-#chemin_fichier = r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm"
-
-# Création des instances
-#gestion_fichier = GestionFichier(chemin_fichier)
-#calculs = Calculs(parametres, gestion_fichier)
+# parametres = Parametres(
+#     Nombre_de_periodes=300,
+#     taux_interet_annuel=1.617/100,
+#     Duree_repracing_anne=100,
+# )
 
 
-# Exemple d'utilisation des paramètres et du fichier de données
-#print(calculs.parametres.Nombre_de_periodes)
-#print(calculs.parametres.Duree_repracing_anne)
-#print(calculs.retourne_valeurs_attendue())

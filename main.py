@@ -432,8 +432,8 @@ class App(customtkinter.CTk):
         if self.selected_file_path != None : 
             self.chemin_fichier = rf"{self.selected_file_path}"
             # Création des instances
-            self.gestion_fichier = Ap.GestionFichier(self.chemin_fichier)
-            calculs = Ap.Calculs(param, self.gestion_fichier)
+            gestion_fichier = Ap.GestionFichier(self.chemin_fichier)
+            calculs = Ap.Calculs(param, gestion_fichier)
             resultat = calculs.retourne_valeurs_attendue()
             resultat_arrondis = round(resultat , 3)
             print("Résultat du calcul :", resultat_arrondis)
