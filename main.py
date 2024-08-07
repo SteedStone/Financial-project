@@ -50,27 +50,51 @@ class TableauResume(customtkinter.CTkFrame):
             self.update_tableau()
 
     def start_init_valeur(self) : 
+        self.waiting_tableau("En cours de traitement...")
         thread = threading.Thread(target=self.init_valeur)
         thread.start()
     def init_valeur(self) : 
-            for cle in self.Mortgage_FTPS : 
-                print(cle)
-                elements = cle[0].split()
-                premier_element = elements[0]
-                nmb_Periode = int(premier_element[:-1]) * 12
-                if "FIX" in elements : 
-                    duree_rpracing = 100
-                else : 
-                    duree_rpracing = int(elements[2].split('/')[0])
+            if self.parent.selected_file_path == None : 
+                tkinter.messagebox.showwarning(title='No file enter',message='Please check you have chosen a file')
+                self.waiting_tableau("No file enter")
+            elif self.parent.entry2.get() == "" : 
+                tkinter.messagebox.showwarning(title='No interest rate enter',message='Please check you have entered an interest rate')
+                self.waiting_tableau("No interest rate enter")
+            else : 
+                for cle in self.Mortgage_FTPS : 
+                    print(cle)
+                    elements = cle[0].split()
+                    premier_element = elements[0]
+                    nmb_Periode = int(premier_element[:-1]) * 12
+                    if "FIX" in elements : 
+                        duree_rpracing = 100
+                    else : 
+                        duree_rpracing = int(elements[2].split('/')[0])
+                        print(duree_rpracing)
+                    # Taux is useless because it is reassigned later in the function
+                    taux=0
+                    print(nmb_Periode)
                     print(duree_rpracing)
-                # Taux is useless because it is reassigned later in the function
-                taux=0
-                print(nmb_Periode)
-                print(duree_rpracing)
-                self.Mortgage_FTPS[cle] = str(self.parent.donne_resultat(nmb_Periode,taux , duree_rpracing))
-            self.after(0, self.update_tableau())
+                    self.Mortgage_FTPS[cle] = str(self.parent.donne_resultat(nmb_Periode,taux , duree_rpracing))
+                self.after(0, self.update_tableau())
+                
+    def waiting_tableau(self ,param):
+        customtkinter.CTkLabel(self, text="Mortgage").grid(row=0, column=0, sticky="nsew")
+        for i, magasin in enumerate(self.FTPS, start=1):
+            customtkinter.CTkLabel(self, text=magasin).grid(row=0, column=i, sticky="nsew")
+
+        for i, fruit in enumerate(self.MortGage, start=1):
+            customtkinter.CTkLabel(self, text=fruit).grid(row=i, column=0, sticky="nsew")
+            for j in range(1, len(self.FTPS) + 1):
+                # prix = self.get_prix(fruit, self.FTPS[j - 1])  # Obtenir le prix du fruit dans le magasin actuel
+                customtkinter.CTkLabel(self, text=f"{param}").grid(row=i, column=j, sticky="nsew")
                 
 
+        # Ajuster les poids des colonnes et des lignes pour permettre le redimensionnement
+        for i in range(len(self.FTPS) + 1):
+            self.grid_columnconfigure(i, weight=1)
+        for i in range(len(self.MortGage) + 1):
+            self.grid_rowconfigure(i, weight=1)
     def update_tableau(self ):
         customtkinter.CTkLabel(self, text="Mortgage").grid(row=0, column=0, sticky="nsew")
         for i, magasin in enumerate(self.FTPS, start=1):
@@ -128,15 +152,15 @@ class App(customtkinter.CTk):
         #Ext button
         self.exit_button()
         
-        #Premiere box 
+        #Premiere box en haut a gauche
         self.First_box()
-        #Deuxième box 
+        #Deuxième box en haut a droite 
         self.Second_box()
-
+        # en bas a droite 
         self.third_box(bol = False)
         self.resulat_boutton()
         
-
+        self.fourth_box()
         
                 
 
@@ -145,7 +169,9 @@ class App(customtkinter.CTk):
 
         
 
-        # create slider and progressbar frame
+        
+    # Box on the bottom left
+    def fourth_box(self) :
         self.slider_progressbar_frame = customtkinter.CTkFrame(self, fg_color="transparent")
         self.slider_progressbar_frame.grid(row=1, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
         self.slider_progressbar_frame.grid_columnconfigure(0, weight=1)
@@ -269,7 +295,7 @@ class App(customtkinter.CTk):
         self.tabview.tab("FTP rates").grid_columnconfigure(0, weight=0)  # configure grid of individual tabs            self.tabview.tab("FTP option").grid_columnconfigure(0, weight=1)
 
 
-        self.main_button_1 = customtkinter.CTkButton(master=self.tabview.tab("FTP rates"), fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"),command=self.button_event,text="Calculer l'AS")
+        self.main_button_1 = customtkinter.CTkButton(master=self.tabview.tab("FTP rates"), fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"),command=self.Waiting_AsCalculation,text="Calculer l'AS")
         self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
     def third_box(self , bol) : 
@@ -349,8 +375,13 @@ class App(customtkinter.CTk):
             print("Fichier sélectionné :", self.selected_file_path)
             # Vous pouvez appeler une fonction de traitement ici ou utiliser selected_file_path ailleurs dans votre programme
 
+    def Waiting_AsCalculation(self) :
+        self.waiting_apparence_mode(False , 0)
 
-    def button_event(self):
+
+        thread2 = threading.Thread(target=self.AsCalulation)
+        thread2.start()
+    def AsCalulation(self):
         
         
         nb_periodes = int(self.get_value_slider * 12) + 5
@@ -363,18 +394,23 @@ class App(customtkinter.CTk):
             # Création des instances
             self.gestion_fichier = Ap.GestionFichier(self.chemin_fichier)
             calculs = Ap.Calculs(param, self.gestion_fichier)
-            print("Résultat du calcul :", calculs.retourne_valeurs_attendue())
 
             Resultat = calculs.retourne_valeurs_attendue()
-            self.scaling_label = customtkinter.CTkLabel(self.tabview.tab("FTP rates"), text=str(Resultat))
-            self.scaling_label.grid(row=7, column=3, padx=20, pady=(0, 5))
+            self.waiting_apparence_mode(True , Resultat)
         else : 
             tkinter.messagebox.showwarning(title='Missing parameters',message='Please enter the correct param') 
     
 
     
     
-    
+    def waiting_apparence_mode(self , bol1 , Resultat):
+        if bol1 == True : 
+            self.inqueue2.destroy()
+            self.inqueue = customtkinter.CTkLabel(self.tabview.tab("FTP rates"), text=str(Resultat)).grid(row=7, column=3, padx=20, pady=(0, 5))
+        else : 
+            self.inqueue2 = customtkinter.CTkLabel(self.tabview.tab("FTP rates"), text="En cours de traitement...")
+            self.inqueue2.grid(row=7, column=3, padx=20, pady=(0, 5))
+            
     
     def log_out(self) : 
         self.destroy()
@@ -433,6 +469,7 @@ class App(customtkinter.CTk):
     def update_label(self,value):
         self.scaling_label2.configure(text = f"T = {int(value)}")
     def donne_resultat(self , nb_periodes , taux_interet_annuel , Duree_repracing_anne) : 
+        
         taux_interet_annuel = float(self.entry2.get())
         param = Ap.Parametres(nb_periodes, taux_interet_annuel, Duree_repracing_anne)
         if self.selected_file_path != None : 
@@ -445,6 +482,9 @@ class App(customtkinter.CTk):
             print("Résultat du calcul :", resultat_arrondis)
 
             return resultat_arrondis
+        else : 
+            tkinter.messagebox.showwarning(title='No file enter',message='Please check you have chosen a file') 
+        
             
          
 
