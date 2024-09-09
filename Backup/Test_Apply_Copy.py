@@ -9,7 +9,10 @@ import unittest
 # Creation des paramètre nécessaire aux tests 
 
 File_path = 'Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm'
+File_path2 = 'Premium formules.xlsm'
 file_class = app.GestionFichier(File_path)
+file_class2 = app.GestionFichier(File_path2)
+
 
 
 
@@ -35,6 +38,17 @@ class TestAppli_copy(unittest.TestCase):
         calculs = app.Calculs(parametres0, file_class)
         print(calculs.retourne_valeurs_attendue())
         self.assertEqual(round(calculs.retourne_valeurs_attendue(),3), -0.192)
+    # Test Mortgage 10 5/5/5 = 2.786
+    def test_right_return_value2(self):
+        parametres0 = app.Parametres(
+            Nombre_de_periodes=300,
+            taux_interet_annuel=3.202570521
+
+,
+            Duree_repracing_anne=5,
+        )
+        calculs = app.Calculs(parametres0, file_class2)
+        self.assertEqual(round(calculs.retourne_valeurs_attendue(),3), 2.786)
 
 if __name__ == '__main__':
     unittest.main()

@@ -26,7 +26,7 @@ class Calculs:
     def retourne_valeurs_attendue(self) : 
             # Param that won't change
             montant_emprunt = 10000000
-            prepayment = 0.04 
+            prepayment = 0.04
             nombre_de_payment_par_an = 12
             per = 1
 

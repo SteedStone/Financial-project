@@ -4,7 +4,7 @@ import scienceplots
 import numpy as np 
 import numpy_financial as npf
 
-data = pd.read_excel(r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm",engine="openpyxl",sheet_name='BBG rates',skiprows=1) 
+data = pd.read_excel(r"C:\Users\guera\Desktop\Projet\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm",engine="openpyxl",sheet_name='BBG rates',skiprows=1) 
 
 class Parametres:
     def __init__(self, Nombre_de_periodes, montant_emprunt, taux_interet_annuel, prepayment, nombre_de_payment_par_an, Duree_repracing_anne):
@@ -28,16 +28,16 @@ class Calculs:
 
 # Paramètres à modifier
 parametres = Parametres(
-    Nombre_de_periodes=180,
+    Nombre_de_periodes=300,
     montant_emprunt=10000000,
-    taux_interet_annuel=1.58/100,
+    taux_interet_annuel=3.14,
     prepayment=4/100,
     nombre_de_payment_par_an=12,
-    Duree_repracing_anne=1
+    Duree_repracing_anne=100
 )
 
 # Chemin vers le fichier Excel
-chemin_fichier = r"C:\Users\guera\OneDrive - UCL\Bureau\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm"
+chemin_fichier = r"C:\Users\guera\Desktop\Projet\Papa\Calcul Hedging_Rates_BBG_based_NEW_INCL_SECUR_Factor_V2.2_frozen.xlsm"
 
 # Création des instances
 gestion_fichier = GestionFichier(chemin_fichier)
@@ -49,14 +49,15 @@ print(calculs.gestion_fichier.data.head())
 
 #Parametres a modifier 
 
-Nombre_de_periodes = 180 #Paramètres
-montant_emprunt = 10000000 #Paramètres 
-taux_interet_annuel = 1.58/100  #Paramètres
-prepayment = 4/100 #Paramètres
-nombre_de_payment_par_an = 12  #Paramètres
+Nombre_de_periodes=300
+montant_emprunt=10000000
+taux_interet_annuel=3.14
+prepayment=4/100
+nombre_de_payment_par_an=12
+Duree_repracing_anne=100
 Periodical_basis = (1+taux_interet_annuel)**(1/nombre_de_payment_par_an)-1
 Periodical_basis_2 = (1+prepayment)**(1/nombre_de_payment_par_an)-1 
-Duree_repracing_anne = 1 #Paramètres
+
 
 
 per = 1 #Paramètres
