@@ -45,7 +45,8 @@ class TestAppli_copy(unittest.TestCase):
             taux_interet_annuel=3.202570521
 
 ,
-            Duree_repracing_anne=5,
+            Duree_repracing_anne=5
+            ,
         )
         calculs = app.Calculs(parametres0, file_class2)
         self.assertEqual(round(calculs.retourne_valeurs_attendue(),3), 2.786)
