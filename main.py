@@ -271,7 +271,7 @@ class App(customtkinter.CTk):
         self.frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew") 
         self.frame.grid_columnconfigure(1, weight=1)
 
-        self.label = customtkinter.CTkLabel(master=self.frame,text='Access for Olivier Dewell') 
+        self.label = customtkinter.CTkLabel(master=self.frame,text='Access for Customer') 
         self.label.grid(row=1, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew")  
 
 

@@ -6,6 +6,13 @@ A GUI-based financial calculator built with Python and CustomTkinter for computi
 
 This application provides a comprehensive tool for financial calculations related to mortgage pricing and option premiums. It features a modern dark-themed interface and supports various mortgage products with different repricing frequencies.
 
+![Maindesk](Pictures/Capture%20d’écran%202025-08-15%20205557.jpg)
+### Treatment
+![Treatment](Pictures/tREATMENT.jpg)
+### Final result
+![Treatment](Pictures/Predicted%20interests.jpg)
+
+
 ## Features
 
 - **Interactive GUI**: Modern dark-themed interface built with CustomTkinter
@@ -32,10 +39,18 @@ This application provides a comprehensive tool for financial calculations relate
 
 ### Prerequisites
 - Python 3.7+
-- Required packages (install via pip):
 
+### Quick Setup
+1. Clone or download this repository
+2. Install dependencies:
 ```bash
-pip install customtkinter pandas numpy numpy-financial openpyxl reportlab
+pip install -r requirements.txt
+```
+
+### Manual Installation
+Alternatively, install packages individually:
+```bash
+pip install customtkinter pandas numpy numpy-financial openpyxl reportlab cx-Freeze
 ```
 
 ### Running the Application
@@ -117,6 +132,11 @@ The project follows a modular structure with separation between GUI (main.py) an
 - Added comprehensive test suite
 - Improved error handling and validation
 
-## License
+## Potential improvements
 
-This project is proprietary software developed for financial calculations.
+- More structured code 
+- Better understanding of the algorithm used in the excel sheet
+- Project made in my first year of engineering
+
+
+ (Side notes) This project has been made in collaboration with my father who work in this field
