@@ -1,6 +1,6 @@
 # Financial Calculator - Option Premium & FTP Rates
 
-A GUI-based financial calculator built with Python and CustomTkinter for computing option premiums and FTP (Funds Transfer Pricing) rates for mortgage products.
+A GUI-based financial calculator built with Python and CustomTkinter for computing FTP (Funds Transfer Pricing) rates for mortgage products.
 
 ## Overview
 
